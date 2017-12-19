@@ -35,3 +35,17 @@ export const pageImpressions = async ({pageId, pageToken: access_token, date_pre
 }
 
 
+export const pageEngagedUsers = async ({pageId, pageToken: access_token, date_preset = "this_month", period = "day", metric = "page_engaged_users"}) => {
+  const res = await axios.get(`${endpoint}/${pageId}/insights`, {
+    params: {
+      access_token,
+      metric,
+      date_preset,
+      period
+    }
+  })
+
+  const {data: engagements} = res
+
+  return {engagements}
+}
