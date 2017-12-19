@@ -1,16 +1,18 @@
-import { pageImpressions} from "../pageInsights";
+import {getPageAccessTokens, pageImpressions} from "../pageInsights";
+import dotenv from "dotenv"
 
+dotenv.config()
+const {USER_ACCESS_TOKEN: userAccessToken} = process.env
 const _ = console.log
 
-  /* Quick test area */
 ;(async () => {
   const TEST_CASE = "Get page impressions"
   let pass = true
 
   try {
-    // const {
-    //   pageId:
-    // }
+    const {pageAccessTokens} = await getPageAccessTokens(userAccessToken)
+    const firstPage = pageAccessTokens.data[0]
+    const {id: pageId, access_token: pageToken} = firstPage
     const query = {pageId,pageToken}
     const {impressions} = await pageImpressions(query)
     _("[impressions]", impressions)

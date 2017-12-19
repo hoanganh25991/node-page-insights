@@ -3,7 +3,6 @@ import dotenv from "dotenv"
 
 dotenv.config()
 const {USER_ACCESS_TOKEN: userAccessToken} = process.env
-
 const _ = console.log
 
 ;(async () => {
