@@ -1,0 +1,50 @@
+{
+  "name": "node-gobear",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-inline-json-import": "^0.2.1",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-preset-node7": "^1.5.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.0.0",
+    "nodemon": "^1.12.4",
+    "prettier": "^1.4.4"
+  },
+  "scripts": {
+    "precommit": "lint-staged",
+    "postmerge": "yarn build",
+    "start": "yarn migration && yarn build && yarn start:dev",
+    "restart": "yarn migration && yarn build && yarn start:dev",
+    "start:dev": "nodemon dist/bin/www",
+    "test": "babel-node scripts/run-test",
+    "build": "babel-node scripts/deploy.js",
+    "migration": "babel-node scripts/migration.js"
+  },
+  "dependencies": {
+    "axios": "^0.17.1",
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "cors": "^2.8.4",
+    "debug": "~2.6.9",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "helmet": "^3.9.0",
+    "moment": "^2.19.3",
+    "morgan": "~1.9.0",
+    "serve-favicon": "~2.4.5"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write --no-semi --print-width 120",
+      "git add"
+    ]
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "src/*"
+    ],
+    "delay": "2500"
+  }
+}
