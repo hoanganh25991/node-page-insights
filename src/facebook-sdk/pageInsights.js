@@ -108,6 +108,7 @@ export const pageReactions = async ({ pageId, pageToken: access_token, date_pres
 }
 
 export const transformGenderAgesData = values => {
+  const totalSample = values.length
   const genderAges = values.reduce((carry, vObj) => {
     const value = vObj.value
     Object.keys(value).forEach(key => {
@@ -126,6 +127,12 @@ export const transformGenderAgesData = values => {
 
     return carry
   }, {})
+
+  // Get average
+  Object.values(genderAges).forEach(group => {
+    group.F = Math.floor(group.F / totalSample)
+    group.M = Math.floor(group.M / totalSample)
+  })
 
   return Object.values(genderAges)
 }

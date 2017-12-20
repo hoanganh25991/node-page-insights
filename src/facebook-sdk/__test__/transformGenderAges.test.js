@@ -7,11 +7,19 @@ const _ = console.log
 
   try {
     const gender_ages = transformGenderAgesData(values)
-    _(values)
     _("[gender_ages]", gender_ages)
 
-    const expectF13_17 = 16
-    pass = gender_ages.filter(group => (group.name = "13-17"))[0].F === expectF13_17
+    const expectF13_17 = 8
+    const expectM55_64 = 32
+
+    const F13_17 = gender_ages.filter(group => group.name === "13-17")[0].F
+    const M55_65 = gender_ages.filter(group => group.name === "55-64")[0].M
+
+    _("[F13_17]", F13_17)
+    _("[M55_65]", M55_65)
+
+    pass = pass && F13_17 === expectF13_17
+    pass = pass && M55_65 === expectM55_64
   } catch (err) {
     _(err)
     pass = false
