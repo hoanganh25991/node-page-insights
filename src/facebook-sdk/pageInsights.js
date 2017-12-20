@@ -56,6 +56,13 @@ export const callMetric = async ({ pageId, access_token, date_preset, period, me
   })
 }
 
+export const extractFirstData = res => {
+  const { data: { data } } = res
+  const firstData = data[0]
+  const { values } = firstData
+  return values
+}
+
 export const pageImpressions = async ({ pageId, pageToken: access_token, date_preset, period, metric }) => {
   date_preset = date_preset || "this_month"
   period = period || "day"
@@ -100,12 +107,36 @@ export const pageReactions = async ({ pageId, pageToken: access_token, date_pres
   return { reactions }
 }
 
+export const transformGenderAgesData = values => {
+  const genderAges = values.reduce((carry, vObj) => {
+    const value = vObj.value
+    Object.keys(value).forEach(key => {
+      // Extract (gender, age-range) from key name
+      // value: {F.13-17: 8}
+      // key: F.13-17 >>> gender: "F", age: "13-17"
+      const [gender, age] = key.split(".")
+      const genderVal = +value[key]
+      if (gender === "U") return
+
+      // Update total gender
+      const ageGroup = carry[age] || { name: age, F: 0, M: 0 }
+      ageGroup[gender] = ageGroup[gender] + genderVal
+      carry[age] = ageGroup
+    })
+
+    return carry
+  }, {})
+
+  return Object.values(genderAges)
+}
+
 export const pageGenderAges = async ({ pageId, pageToken: access_token, date_preset, period, metric }) => {
   _(pageId, access_token)
   date_preset = date_preset || "this_month"
   period = period || "lifetime"
   metric = metric || "page_fans_gender_age"
   const res = await callMetric({ pageId, access_token, date_preset, period, metric })
-  const { data: gender_ages } = res
+  const values = extractFirstData(res)
+  const gender_ages = transformGenderAgesData(values)
   return { gender_ages }
 }
