@@ -52,7 +52,7 @@ export const callMetric = async ({pageId, access_token, date_preset, period, met
 
 export const pageImpressions = async ({pageId, pageToken: access_token, date_preset , period, metric}) => {
   date_preset = date_preset || "this_month"
-  period = period  || "this_month"
+  period = period  || "day"
   metric = metric  || "page_impressions"
   const res = await callMetric({pageId, access_token, date_preset, period, metric})
   const {data: impressions} = res
@@ -62,7 +62,7 @@ export const pageImpressions = async ({pageId, pageToken: access_token, date_pre
 
 export const pageEngagedUsers = async ({pageId, pageToken: access_token, date_preset, period, metric}) => {
   date_preset = date_preset || "this_month"
-  period = period  || "this_month"
+  period = period  || "day"
   metric = metric  || "page_engaged_users"
   const res = await callMetric({pageId, access_token, date_preset, period, metric})
   const {data: engagements} = res
@@ -72,7 +72,7 @@ export const pageEngagedUsers = async ({pageId, pageToken: access_token, date_pr
 
 export const pagePostEngagements = async ({pageId, pageToken: access_token, date_preset, period, metric}) => {
   date_preset = date_preset || "this_month"
-  period = period  || "this_month"
+  period = period  || "day"
   metric = metric  || "page_post_engagements"
   const res = await callMetric({pageId, access_token, date_preset, period, metric})
   const {data: post_engagements} = res
@@ -90,7 +90,7 @@ export const pageReactions = async ({pageId, pageToken: access_token, date_prese
   // const reactions = await Promise.all(promiseArr)
   // return {reactions}
   date_preset = date_preset || "this_month"
-  period = period  || "this_month"
+  period = period  || "day"
   metric = metric  || "page_actions_post_reactions_total"
   const res = await callMetric({pageId, access_token, date_preset, period, metric})
   const {data: reactions} = res
