@@ -5,6 +5,8 @@ dotenv.config()
 const { FACEBOOK_GRAPH_API_ENDPOINT: endpoint } = process.env
 const _ = console.log
 
+// Custom axios instance
+// With timeout & define when throw exception on status
 const axios = OAxois.create({
   timeout: 20000,
   validateStatus(status) {
@@ -22,6 +24,9 @@ const metricReactions = [
   "page_actions_post_reactions_total"
 ]
 
+const GET_PAGE_ACCESS_TOKENS_ERR = "[ERR] Cant exchange User Access Token to Page Access Token"
+const FETCH_GRAPH_API_ERR = "[ERR] Fetch facebook graph api"
+
 /**
  * Exchange Page Access Token from User Access Token
  * @param userAccessToken
@@ -32,7 +37,8 @@ export const getPageAccessTokens = async userAccessToken => {
     params: { access_token: userAccessToken }
   })
 
-  const { data: { data: pageAccessTokens } } = res
+  const { data: { data: pageAccessTokens, error } } = res
+  if (error) throw new Error(GET_PAGE_ACCESS_TOKENS_ERR)
   return { pageAccessTokens }
 }
 
@@ -64,7 +70,7 @@ export const callMetric = async ({ pageId, access_token, date_preset, period, me
 export const extractDataFromGraphRes = res => {
   const { data: resBody } = res
   const { error, data } = resBody
-  if (error) throw new Error("[ERR] Fetch facebook graph api")
+  if (error) throw new Error(FETCH_GRAPH_API_ERR)
   if (data.length === 0) return []
   const firstData = data[0]
   const { values } = firstData
