@@ -56,8 +56,16 @@ export const callMetric = async ({ pageId, access_token, date_preset, period, me
   })
 }
 
-export const extractFirstData = res => {
-  const { data: { data } } = res
+/**
+ * Data return from facebook really nested
+ * Get the first values out
+ * @param res
+ */
+export const extractDataFromGraphRes = res => {
+  const { data: resBody } = res
+  const { error, data } = resBody
+  if (error) throw new Error("[ERR] Fetch facebook graph api")
+  if (data.length === 0) return []
   const firstData = data[0]
   const { values } = firstData
   return values
@@ -107,6 +115,11 @@ export const pageReactions = async ({ pageId, pageToken: access_token, date_pres
   return { reactions }
 }
 
+/**
+ * Transform func to read gender ages data
+ * @param values
+ * @returns {Array}
+ */
 export const transformGenderAgesData = values => {
   const totalSample = values.length
   const genderAges = values.reduce((carry, vObj) => {
@@ -137,13 +150,22 @@ export const transformGenderAgesData = values => {
   return Object.values(genderAges)
 }
 
+/**
+ * Average fans by gender & age
+ * @param pageId
+ * @param access_token
+ * @param date_preset
+ * @param period
+ * @param metric
+ * @returns {Promise.<{gender_ages}>}
+ */
 export const pageGenderAges = async ({ pageId, pageToken: access_token, date_preset, period, metric }) => {
   _(pageId, access_token)
   date_preset = date_preset || "this_month"
   period = period || "lifetime"
   metric = metric || "page_fans_gender_age"
   const res = await callMetric({ pageId, access_token, date_preset, period, metric })
-  const values = extractFirstData(res)
+  const values = extractDataFromGraphRes(res)
   const gender_ages = transformGenderAgesData(values)
   return { gender_ages }
 }

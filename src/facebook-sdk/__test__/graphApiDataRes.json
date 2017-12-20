@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "name": "page_actions_post_reactions_like_total",
+      "period": "day",
+      "values": [
+        {
+          "value": 10,
+          "end_time": "2017-12-02T08:00:00+0000"
+        },
+        {
+          "value": 0,
+          "end_time": "2017-12-03T08:00:00+0000"
+        }
+      ],
+      "title": "Daily total post like reactions of a page.",
+      "description": "Daily: total post like reactions of a page.",
+      "id": "1602144450026743/insights/page_actions_post_reactions_like_total/day"
+    }
+  ],
+  "paging": {
+    "previous": "https://graph.facebook.com/v2.11/1602144450026743/insights?access_token=EAACEdEose0cBAKRYlntmnfGlbO0go9vG0HG0cBjyPZBmsrtJOso9K9IOwjub3t1ANllZAOECP0iMPZB48hNCeb4i9L0oGwEPkimckgo8MUYzgJnMrsvTLE08onxM67zHrVnH2kTx2IT7HhqBdBBZA8ST9SsK7ATJFHtJxx6yxCKp3xhYKrEZCm5F6ptFXmkzZCdgg9UmnThAZDZD&pretty=0&metric=page_actions_post_reactions_like_total&period=day&date_preset=this_month&since=1510646400&until=1512115200"
+  }
+}
