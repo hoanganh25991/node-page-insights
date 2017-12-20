@@ -71,12 +71,29 @@ export const extractDataFromGraphRes = res => {
   return values
 }
 
+export const countTotalValues = values => {
+  return values.reduce((carry, vObj) => {
+    carry += Object.values(vObj)[0]
+    return carry
+  }, 0)
+}
+
+export const countTotalReactions = values => {
+  return values.reduce((carry, vObj) => {
+    const value = vObj.value
+    const { like, love, wow, haha, sorry, anger } = value
+    carry += like + love + wow + haha + sorry + anger
+    return carry
+  }, 0)
+}
+
 export const pageImpressions = async ({ pageId, pageToken: access_token, date_preset, period, metric }) => {
   date_preset = date_preset || "this_month"
   period = period || "day"
   metric = metric || "page_impressions"
   const res = await callMetric({ pageId, access_token, date_preset, period, metric })
-  const { data: impressions } = res
+  const values = extractDataFromGraphRes(res)
+  const impressions = countTotalValues(values)
   return { impressions }
 }
 
@@ -85,7 +102,8 @@ export const pageEngagedUsers = async ({ pageId, pageToken: access_token, date_p
   period = period || "day"
   metric = metric || "page_engaged_users"
   const res = await callMetric({ pageId, access_token, date_preset, period, metric })
-  const { data: engagements } = res
+  const values = extractDataFromGraphRes(res)
+  const engagements = countTotalValues(values)
   return { engagements }
 }
 
@@ -94,7 +112,8 @@ export const pagePostEngagements = async ({ pageId, pageToken: access_token, dat
   period = period || "day"
   metric = metric || "page_post_engagements"
   const res = await callMetric({ pageId, access_token, date_preset, period, metric })
-  const { data: post_engagements } = res
+  const values = extractDataFromGraphRes(res)
+  const post_engagements = countTotalValues(values)
   return { post_engagements }
 }
 
@@ -111,7 +130,8 @@ export const pageReactions = async ({ pageId, pageToken: access_token, date_pres
   period = period || "day"
   metric = metric || "page_actions_post_reactions_total"
   const res = await callMetric({ pageId, access_token, date_preset, period, metric })
-  const { data: reactions } = res
+  const values = extractDataFromGraphRes(res)
+  const reactions = countTotalReactions(values)
   return { reactions }
 }
 

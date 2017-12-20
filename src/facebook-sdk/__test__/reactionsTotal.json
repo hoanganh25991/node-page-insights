@@ -1,0 +1,46 @@
+[
+  {
+    "value": {
+      "like": 15,
+      "love": 0,
+      "wow": 0,
+      "haha": 0,
+      "sorry": 0,
+      "anger": 0
+    },
+    "end_time": "2017-12-02T08:00:00+0000"
+  },
+  {
+    "value": {
+      "like": 0,
+      "love": 0,
+      "wow": 12,
+      "haha": 0,
+      "sorry": 0,
+      "anger": 0
+    },
+    "end_time": "2017-12-03T08:00:00+0000"
+  },
+  {
+    "value": {
+      "like": 0,
+      "love": 0,
+      "wow": 0,
+      "haha": 0,
+      "sorry": 0,
+      "anger": 11
+    },
+    "end_time": "2017-12-04T08:00:00+0000"
+  },
+  {
+    "value": {
+      "like": 0,
+      "love": 9,
+      "wow": 0,
+      "haha": 0,
+      "sorry": 0,
+      "anger": 0
+    },
+    "end_time": "2017-12-05T08:00:00+0000"
+  }
+]
