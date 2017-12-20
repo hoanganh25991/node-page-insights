@@ -1,47 +1,52 @@
 import {getPageAccessTokens, pageImpressions, pageEngagedUsers, pagePostEngagements, pageReactions} from "../pageInsights";
-import dotenv from "dotenv"
+import prompt from "prompt"
 
-dotenv.config()
-const {USER_ACCESS_TOKEN: userAccessToken} = process.env
 const _ = console.log
 
 ;(async () => {
   const TEST_CASE = "Get page insights"
   let pass = true
+  process.env.ENV_TESTING = true
 
   try {
-    const {pageAccessTokens} = await getPageAccessTokens(userAccessToken)
-    const firstPage = pageAccessTokens.data[0]
+    // Ask for dynamic User Access Token
+    prompt.start();
 
+    const userAccessToken = await new Promise(rslv => {
+      prompt.get(['userAccessToken'], (err, {userAccessToken}) => rslv(userAccessToken))
+    })
+
+    prompt.stop()
+
+
+    // Exchange page access token
     // Query condition
+    const {pageAccessTokens} = await getPageAccessTokens(userAccessToken)
+    const firstPage = pageAccessTokens[0]
     const {id: pageId, access_token: pageToken} = firstPage
     const query = {pageId,pageToken}
 
+    _("[Total][pageAccessTokens]", pageAccessTokens.length)
     _("[query]", query)
 
-    // // Read impressions
-    // const {impressions} = await pageImpressions(query)
-    // _("[impressions]", impressions)
-    // if(!impressions) return pass = false
-    //
-    // // Read engagements
-    // const {engagements} = await pageEngagedUsers(query)
-    // _("[engagements]", engagements)
-    // if(!engagements) return pass = false
-    //
-    // // Post engagements
-    // const {post_engagements} = await pagePostEngagements(query)
-    // _("[post_engagements]", post_engagements)
-    // if(!post_engagements) return pass = false
-
-
+    // Read impressions
+    // Read engagements
+    // Post engagements
     // Reactions
+    const {impressions} = await pageImpressions(query)
+    const {engagements} = await pageEngagedUsers(query)
+    const {post_engagements} = await pagePostEngagements(query)
     const {reactions} = await pageReactions(query)
-    _("[reactions]", reactions)
-    if(!reactions) return pass = false
 
+    _("[impressions]", impressions)
+    _("[engagements]", engagements)
+    _("[post_engagements]", post_engagements)
+    _("[reactions]", reactions)
+
+    pass= impressions && engagements && post_engagements && reactions
   } catch (err) {
     _(err.stack.split("\n"))
+    _(err.message)
     pass = false
   } finally {
     pass ? _(`\x1b[42m[PASS]\x1b[0m ${TEST_CASE}`) : _(`\x1b[41m[FAIL]\x1b[0m ${TEST_CASE}`)

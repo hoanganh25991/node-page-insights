@@ -1,8 +1,6 @@
 import {getPageAccessTokens} from "../pageInsights";
-import dotenv from "dotenv"
+import prompt from "prompt"
 
-dotenv.config()
-const {USER_ACCESS_TOKEN: userAccessToken} = process.env
 const _ = console.log
 
 ;(async () => {
@@ -10,9 +8,16 @@ const _ = console.log
   let pass = true
 
   try {
+    // Ask for dynamic User Access Token
+    prompt.start();
+    const userAccessToken = await new Promise(rslv => {
+      prompt.get(['userAccessToken'], (err, {userAccessToken}) => rslv(userAccessToken))
+    })
+    prompt.stop()
+
     const {pageAccessTokens} = await getPageAccessTokens(userAccessToken)
     _("[pageAccessTokens]", pageAccessTokens)
-    const shouldHave = pageAccessTokens && pageAccessTokens.data.length > 0
+    const shouldHave = pageAccessTokens && pageAccessTokens.length > 0
     if(!shouldHave) return pass = false
   } catch (err) {
     _(err)
